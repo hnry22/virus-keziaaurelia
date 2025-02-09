@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>rahasiaaa hekerrrr</title>
+    <style>
+        /* CSS untuk halaman utama */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffccff; /* Background warna pink muda */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff3366;
+            font-size: 36px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .yes-button, .no-button {
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            transition: transform 0.2s ease, font-size 0.2s, background-color 0.3s;
+        }
+
+        .yes-button {
+            background-color: #28a745; /* Tombol Yes hijau */
+            color: white;
+        }
+
+        .no-button {
+            background-color: #dc3545; /* Tombol No merah */
+            color: white;
+        }
+
+        .gif_container {
+            margin-top: 30px;
+        }
+
+        /* CSS untuk halaman Yes */
+        .yes-container {
+            font-family: Arial, sans-serif;
+            background-color: #ffccff; /* Background warna pink muda */
+            text-align: center;
+            padding: 50px;
+        }
+
+        .yes-header_text {
+            color: #ff3366;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .yes-gif_container img {
+            width: 60%;
+            max-width: 500px;
+        }
+
+        /* Animasi untuk tombol saat diklik */
+        .clicked {
+            transform: scale(1.1);
+        }
+
+        /* Efek animasi pada teks tombol */
+        .btn-animation {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Halaman surprise */
+        .surprise {
+            color: #ff3366;
+            font-size: 40px;
+            margin-top: 30px;
+            display: none;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Halaman Utama -->
+    <div class="container">
+        <h1>hari ini mau main obox gaa?</h1>
+        <div class="buttons">
+            <button class="yes-button">Boleh</button>
+            <button class="no-button">Ga malas</button>
+        </div>
+        <div class="gif_container">
+            <img src="https://media.giphy.com/media/EExJM3NifsBwjJukuF/giphy.gif?cid=ecf05e47z4rpsewfvzy6hgg1djxen09v7m12uc7oi0mdvq2y&ep=v1_stickers_related&rid=giphy.gif&ct=s" alt="Cute GIF">
+        </div>
+    </div>
+
+    <!-- Halaman Yes -->
+    <div id="yesPage" class="yes-container" style="display: none;">
+        <h1 class="yes-header_text">Hore hari ini mabar obox!</h1>
+        <div class="yes-gif_container">
+            <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjF1cXVqaDQ5ejJrb3FvbWxlOGkxN3NwOW80MG5wZnNteDgyYTB2aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26zze48lYGsjIoiFG/giphy.gif" alt="Happy GIF">
+        </div>
+        <div class="surprise">🎉🎉🎉🎉🎉</div>
+    </div>
+
+    <!-- Audio MP3 yang diulang -->
+    <audio id="audio" autoplay loop>
+        <source src="musik.mp3" type="audio/mp3">
+        <p>Your browser does not support the audio element. Try using a different browser.</p>
+    </audio>
+
+    <script>
+        const prompts = [
+            "kamu salah pencet?",
+            "sumpah kamu pilih gaa",
+            "SUMPAHHH",
+            "serius?",
+            "hp mu mencet sendiri kan?",
+            "kamu kok pilih ga see",
+            "ga boleh,ga bisa nya mencet boleh",
+            "slslsksksksjkdkshdkhdkhdkhsd",
+            "Ok fine,",
+            "harus milih boleh pokok e "
+        ];
+
+        let promptIndex = 0;
+
+        function handleNo() {
+            const btnNo = document.querySelector('.no-button');
+            const btnYes = document.querySelector('.yes-button');
+            btnNo.textContent = prompts[promptIndex];
+            promptIndex = (promptIndex + 1) % prompts.length;
+            const currentSize = parseFloat(window.getComputedStyle(btnYes).fontSize);
+            btnYes.style.fontSize = `${currentSize * 1.5}px`;
+            btnNo.classList.add('btn-animation'); // Animasi shake untuk tombol No
+        }
+
+        function handleYes() {
+            // Arahkan ke halaman Yes
+            document.querySelector('.container').style.display = 'none'; // Sembunyikan halaman utama
+            document.querySelector('#yesPage').style.display = 'block';  // Tampilkan halaman Yes
+            document.querySelector('.surprise').style.display = 'block'; // Tampilkan surprise
+            let audio = document.getElementById('audio');
+            audio.play();  // Mulai putar audio saat tombol Yes diklik
+        }
+
+        // Pasang event listener setelah konten dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            const btnYes = document.querySelector('.yes-button');
+            const btnNo = document.querySelector('.no-button');
+
+            // Pasang event listener untuk tombol Yes dan No
+            if (btnYes) {
+                btnYes.addEventListener("click", () => {
+                    btnYes.classList.add('clicked'); // Tambahkan efek klik pada tombol Yes
+                    setTimeout(handleYes, 200); // Menunggu animasi klik selesai sebelum melanjutkan
+                    btnYes.style.backgroundColor = '#218838'; // Ubah warna tombol Yes setelah klik
+                });
+            }
+            if (btnNo) {
+                btnNo.addEventListener("click", handleNo);
+            }
+        });
+    </script>
+
+</body>
+</html>
