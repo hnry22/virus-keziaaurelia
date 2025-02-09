@@ -109,6 +109,18 @@
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0); }
         }
+
+        /* Animasi agar tombol merah menghindar */
+        .no-button:hover {
+            transform: translateX(10px);
+            background-color: #c82333;
+            animation: none; /* Hilangkan animasi shake saat hover */
+        }
+
+        .no-button:active {
+            transform: translateX(15px);
+            background-color: #a71d2a;
+        }
     </style>
 </head>
 <body>
@@ -140,18 +152,30 @@
         <p>Your browser does not support the audio element. Try using a different browser.</p>
     </audio>
 
+    <!-- Audio untuk efek suara bom -->
+    <audio id="bombAudio">
+        <source src="merah.mp3" type="audio/mp3">
+        <p>Your browser does not support the audio element. Try using a different browser.</p>
+    </audio>
+
+    <!-- Audio untuk efek suara hijau -->
+    <audio id="greenAudio">
+        <source src="hijau.mp3" type="audio/mp3">
+        <p>Your browser does not support the audio element. Try using a different browser.</p>
+    </audio>
+
     <script>
         const prompts = [
             "kamu salah pencet?",
-            "sumpah kamu pilih gaa",
+            "sumpah kamu pilih merah",
             "SUMPAHHH",
             "serius?",
             "hp mu mencet sendiri kan?",
-            "kamu kok pilih ga see",
-            "ga boleh,ga bisa nya mencet boleh",
+            "kamu kok pilih yg merah se",
+            "wajib pencet yg hijau",
             "slslsksksksjkdkshdkhdkhdkhsd",
             "Ok fine,",
-            "harus milih boleh pokok e "
+            "percuma ga bakal bisa mencet yg merah",
         ];
 
         let promptIndex = 0;
@@ -164,22 +188,41 @@
             const currentSize = parseFloat(window.getComputedStyle(btnYes).fontSize);
             btnYes.style.fontSize = `${currentSize * 1.5}px`;
             btnNo.classList.add('btn-animation'); // Animasi shake untuk tombol No
+
+            // Putar efek suara bom saat tombol No ditekan
+            const bombAudio = document.getElementById('bombAudio');
+            
+            // Pastikan audio berhenti dulu sebelum diputar ulang
+            bombAudio.currentTime = 0;  // Reset ke awal
+            bombAudio.play();  // Putar ulang efek suara bom
         }
 
         function handleYes() {
+            // Putar efek suara hijau saat tombol Yes ditekan
+            const greenAudio = document.getElementById('greenAudio');
+            greenAudio.play();  // Putar suara hijau
+
             // Arahkan ke halaman Yes
             document.querySelector('.container').style.display = 'none'; // Sembunyikan halaman utama
             document.querySelector('#yesPage').style.display = 'block';  // Tampilkan halaman Yes
             document.querySelector('.surprise').style.display = 'block'; // Tampilkan surprise
             let audio = document.getElementById('audio');
             audio.play();  // Mulai putar audio saat tombol Yes diklik
+
+            // Tambahkan pushState untuk mencegah tombol back
+            history.pushState(null, null, location.href);
+
+            // Menonaktifkan tombol back dengan mendengarkan popstate
+            window.addEventListener('popstate', function() {
+                history.pushState(null, null, location.href);
+            });
         }
 
         // Pasang event listener setelah konten dimuat
         document.addEventListener("DOMContentLoaded", () => {
             const btnYes = document.querySelector('.yes-button');
             const btnNo = document.querySelector('.no-button');
-
+            
             // Pasang event listener untuk tombol Yes dan No
             if (btnYes) {
                 btnYes.addEventListener("click", () => {
@@ -191,8 +234,15 @@
             if (btnNo) {
                 btnNo.addEventListener("click", handleNo);
             }
+
+            // Pasang event listener untuk tombol back
+            window.addEventListener('popstate', function() {
+                // Mencegah kembali setelah memilih Yes
+                history.pushState(null, null, location.href);
+            });
         });
     </script>
 
 </body>
 </html>
+
